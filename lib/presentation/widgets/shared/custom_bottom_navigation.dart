@@ -1,12 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class CustomBottomNavigation extends StatelessWidget {
-  const CustomBottomNavigation({super.key});
+  final int pageIndex;
+
+  const CustomBottomNavigation({super.key, required this.pageIndex});
+
+  void onItemTapped(BuildContext context, int index) {
+    switch (index) {
+      case 0:
+        context.go('/home/0');
+        break;
+      case 1:
+        context.go('/home/0');
+        break;
+      case 2:
+        context.go('/home/2');
+        break;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
       elevation: 0,
+      currentIndex: pageIndex,
+      onTap: (value) {
+        onItemTapped(context, value);
+      },
       items: const [
         BottomNavigationBarItem(
           icon: Icon(Icons.home_max),

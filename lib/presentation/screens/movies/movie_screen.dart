@@ -70,16 +70,25 @@ class MovieScreenState extends ConsumerState<MovieScreen> {
   }
 }
 
-class _CustomSliverAppBar extends StatelessWidget {
+class _CustomSliverAppBar extends ConsumerWidget {
   final Movie movie;
 
   const _CustomSliverAppBar({required this.movie});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, ref) {
     final size = MediaQuery.of(context).size;
 
     return SliverAppBar(
+      actions: [
+        IconButton(
+          onPressed: () {
+            ref.read(localStorageRepositoryProvider).toggleFavorite(movie);
+          },
+          icon: const Icon(Icons.favorite_border),
+          // icon: const Icon(Icons.favorite_rounded, color: Colors.red),
+        )
+      ],
       leading: IconButton(
         onPressed: () {
           context.pop();
@@ -112,35 +121,47 @@ class _CustomSliverAppBar extends StatelessWidget {
                 },
               ),
             ),
-            // const SizedBox.expand(
-            //   child: DecoratedBox(
-            //     decoration: BoxDecoration(
-            //         gradient: LinearGradient(
-            //             colors: [
-            //               Colors.transparent,
-            //               Colors.black87,
-            //             ],
-            //             begin: Alignment.topCenter,
-            //             end: Alignment.bottomCenter,
-            //             stops: [0.8, 1])),
-            //   ),
-            // ),
-            const SizedBox.expand(
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                        colors: [
-                          Colors.black,
-                          Colors.transparent,
-                        ],
-                        begin: Alignment.topLeft,
-                        stops: [0.0, 0.14])),
-              ),
-            )
+            _CustomGradien(
+              colors: [Colors.black87.withOpacity(0.4), Colors.transparent],
+              stops: const [0.0, 0.17],
+              begin: Alignment.topRight,
+              end: Alignment.centerLeft,
+            ),
+            _CustomGradien(
+              colors: [Colors.black87.withOpacity(0.4), Colors.transparent],
+              stops: const [0.0, 0.17],
+              begin: Alignment.topLeft,
+              end: Alignment.centerRight,
+            ),
           ],
         ),
       ),
       // f
+    );
+  }
+}
+
+class _CustomGradien extends StatelessWidget {
+  final List<Color> colors;
+  final AlignmentGeometry? begin;
+  final AlignmentGeometry? end;
+  final List<double> stops;
+
+  const _CustomGradien({
+    required this.colors,
+    this.begin = Alignment.topCenter,
+    this.end = Alignment.bottomCenter,
+    required this.stops,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox.expand(
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+            gradient: LinearGradient(
+                colors: colors, begin: begin!, end: end!, stops: stops)),
+      ),
     );
   }
 }
